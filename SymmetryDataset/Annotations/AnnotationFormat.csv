@@ -1,0 +1,10 @@
+{Image File Path, Image Width, Image Height, Image Size}
+{# of Reflection Symmetry N, # of Rotation Symmetry M}
+{Reflection Symmetry 1: Start Pos (x,y), End Pos (x,y)}
+{Reflection Symmetry 2: Start Pos (x,y), End Pos (x,y)}
+...
+{Reflection Symmetry N: Start Pos (x,y), End Pos (x,y)}
+{Rotation Symmetry 1: Center Pos (x,y), Fold (n)}
+{Rotation Symmetry 2: Center Pos (x,y), Fold (n)}
+...
+{Rotation Symmetry M: Center Pos (x,y), Fold (n)}
