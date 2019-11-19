@@ -33,9 +33,9 @@ function error(error) {
 
 if (navigator.mediaDevices.getUserMedia || navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia) {
 	// to debug it on PC
-	getUserMedia({video : {width: 480, height: 320}}, success, error);
+	//getUserMedia({video : {width: 480, height: 320}}, success, error);
 	// to use it on mobile
-	//getUserMedia({video : {facingMode: {exact : 'environment'}}}, success, error);
+	getUserMedia({video : {facingMode: {exact : 'environment'}}}, success, error);
 } 
 else {
 	alert('Unsupport User!');
@@ -45,6 +45,7 @@ document.getElementById('capture').addEventListener('click', function () {
 	context.drawImage(video, 0, 0, 480, 320);      
 })
 
+document.getElementById("video").controls = false;
 
 
 // use a loop to refresh canvas
