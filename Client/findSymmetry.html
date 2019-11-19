@@ -15,16 +15,16 @@
     
     <!--body style='margin : 0px; overflow: hidden;'-->
     <body>
-        <div class="capture camera">
-            <video id="video" width="480" height="320" controls> </video>
-            <canvas id="canvas" width="480" height="320">  </canvas>
-        </div>
 
+        <video id="video" width="480" height="320" controls  style="display:none"> </video>
+
+        <canvas id="canvas" width="480" height="320">  </canvas>
         <div class="toolbox">
             <button id="capture">Capture!</button>
         </div>
 
     
         <script src="captureCamera.js" ></script>
+        <script src="drawCanvas.js" ></script>
     </body>
 </html>
