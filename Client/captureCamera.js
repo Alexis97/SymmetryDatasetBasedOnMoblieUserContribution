@@ -33,9 +33,9 @@ function error(error) {
 
 if (navigator.mediaDevices.getUserMedia || navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia) {
 	// to debug it on PC
-	getUserMedia({video : {width: 480, height: 320}}, success, error);
+	//getUserMedia({video : {width: 480, height: 320}}, success, error);
 	// to use it on mobile
-	//getUserMedia({video : {facingMode: {exact : 'environment'}}}, success, error);
+	getUserMedia({video : {facingMode: {exact : 'environment'}}}, success, error);
 } 
 else {
 	alert('Unsupport User!');
@@ -47,18 +47,19 @@ document.getElementById('capture').addEventListener('click', function () {
 
 
 
-
-
 // use a loop to refresh canvas
 var lastTime = Date.now();
 var deltaTime;
 var recordPath = new Path2D();
+var inputImage = document.getElementById("image");
+inputImage.setAttribute("type", "image");
 function gameloop(){
     var now = Date.now(); 
     deltaTime = now - lastTime; 
     console.log('deltaTime');
     lastTime = now;
     context.drawImage(video, 0, 0, 480, 320);
+    //context.drawImage(inputImage, 0, 0, 480, 320);
     context.stroke(recordPath);
     window.requestAnimationFrame(gameloop);
 }

@@ -1,10 +1,7 @@
 <!doctype HTML>
 <html>
     <head>
-        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-        <!--meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/-->
-        <script src="https://aframe.io/releases/0.9.1/aframe.min.js"></script>
-        <script src="https://rawgit.com/jeromeetienne/AR.js/master/aframe/build/aframe-ar.min.js"></script>
+        <input type="file" id='image' accept="image/*" capture='camera'>
         
     </head>
     
@@ -16,8 +13,7 @@
     <!--body style='margin : 0px; overflow: hidden;'-->
     <body>
 
-        <!--video id="video" width="480" height="320" controls  style="display:none"> </video-->
-        <video id="video" width="480" height="320" controls> </video>
+        <video id="video" width="480" height="320" controls  style="display:none"> </video>
         <canvas id="canvas" width="480" height="320">  </canvas>
         <div class="toolbox">
             <button id="capture">Capture!</button>
