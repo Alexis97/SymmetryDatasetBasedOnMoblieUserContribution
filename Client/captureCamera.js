@@ -45,7 +45,7 @@ document.getElementById('capture').addEventListener('click', function () {
 	context.drawImage(video, 0, 0, 480, 320);      
 })
 
-document.getElementById("video").controls = false;
+
 
 
 // use a loop to refresh canvas
