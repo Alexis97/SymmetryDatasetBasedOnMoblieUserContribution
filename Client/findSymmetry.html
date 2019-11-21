@@ -1,12 +1,14 @@
 <!doctype HTML>
 <html>
     <head>
-        <input type="file" id='image' accept="image/*" capture='camera'>
+        <!--input type="file" id='image' accept="image/*" capture='camera'-->
         
         <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
         <meta name="apple-touch-fullscreen" content="YES">
         <meta name="apple-mobile-web-app-capable" content="yes">
+
+        <link rel="stylesheet" type="text/css" href="mystyle.css">
     </head>
     
     <h1>Finding Symmetry Around!</h1>
@@ -20,7 +22,10 @@
         <video id="video" width="480" height="320" controls  style="display:none"> </video>
         <canvas id="canvas" width="480" height="320">  </canvas>
         <div class="toolbox">
-            <button id="capture">Capture!</button>
+            <button id="change">Change Annotation</button>
+            <button id="clear">Clear</button>
+            <button id="upload">Upload</button>
+            <button id="instruction">Need Instruction?</button>
         </div>
 
         <script src="main.js" ></script>

@@ -1,6 +1,8 @@
+// set the format of all devices
 document.getElementById("video").controls = false;
 document.getElementById("canvas").width = window.innerWidth;
-document.getElementById("canvas").height = window.innerHeight;
+document.getElementById("canvas").height = 0.5* window.innerHeight;
+//document.getElementById("upload").height = 0.5* window.innerHeight;
 
 window.addEventListener('resize', function(){
 		onResize()
@@ -8,7 +10,7 @@ window.addEventListener('resize', function(){
 
 function onResize(){
 	document.getElementById("canvas").width = window.innerWidth;
-	document.getElementById("canvas").height = window.innerHeight;
+	document.getElementById("canvas").height = 0.5* window.innerHeight;
 }
 
 
@@ -30,3 +32,5 @@ window.onload=function () {
 	  	event.preventDefault();
 	});
 }
+
+
