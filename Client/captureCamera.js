@@ -41,6 +41,21 @@ else {
 	alert('Unsupport User!');
 }
 
+// get picture by cameraInput
+var img = document.getElementById('img');
+var takePicture = document.getElementById('cameraInput');
+var takePictureUrl = function () {
+    takePicture.onchange = function (event) {
+        var file = this.files[0];
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+    	reader.onload = function(e){
+    		img.src = this.result;
+    	}
+        
+    }
+}();
+
 
 
 // use a loop to refresh canvas
@@ -54,7 +69,7 @@ function gameloop(){
     deltaTime = now - lastTime; 
     console.log('deltaTime');
     lastTime = now;
-    context.drawImage(video,0,0);
+    context.drawImage(img,0,0);
     //context.drawImage(inputImage, 0, 0, 480, 320);
     context.stroke(recordPath);
     window.requestAnimationFrame(gameloop);
