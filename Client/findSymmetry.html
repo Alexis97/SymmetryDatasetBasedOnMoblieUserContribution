@@ -1,7 +1,7 @@
 <!doctype HTML>
 <html>
     <head>
-        <!--input type="file" id='image' accept="image/*" capture='camera'-->
+        
         
         <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
@@ -18,7 +18,8 @@
     
     <!--body style='margin : 0px; overflow: hidden;'-->
     <body>
-
+        <input type="file" capture="camera" accept="image/*" id="cameraInput" name="cameraInput">
+        
         <video id="video" width="480" height="320" controls  style="display:none"> </video>
         <canvas id="canvas" width="480" height="320">  </canvas>
         <div class="toolbox">
