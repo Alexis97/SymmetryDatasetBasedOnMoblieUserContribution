@@ -3,7 +3,10 @@
 canvas.addEventListener("mousedown",doMouseDown,false);
 canvas.addEventListener('mousemove', doMouseMove,false);
 canvas.addEventListener('mouseup', doMouseUp, false);
-
+// touch events
+canvas.addEventListener('touchstart', doTouchStart, false);
+canvas.addEventListener('touchmove', doTouchMove, false);
+canvas.addEventListener('touchend', doTouchEnd, false);
 
 var started = false;
 var x = 0, y = 0;
@@ -43,5 +46,52 @@ function doMouseUp(event) {
 		doMouseMove(event);
 		started = false;
 	}
+	
+}
+
+function doTouchStart(event) {
+	console.log("touch start!");
+
+	if (event.targetTouches.length == 1) {	// only one finger
+		event.preventDefault();
+		var touch = event.targetTouches[0];
+		var x = touch.pageX;
+		var y = touch.pageY;
+		var canvas = event.target;
+		var loc = getPointOnCanvas(canvas, x, y);
+		console.log("mouse down at point( x:" + loc.x + ", y:" + loc.y + ")");
+		recordPath.moveTo(loc.x, loc.y);
+		started = true;
+	}
+}
+
+function doTouchMove(event) {
+
+	if (event.targetTouches.length == 1) {	// only one finger
+		event.preventDefault();
+		var touch = event.targetTouches[0];
+		var x = touch.pageX;
+		var y = touch.pageY;
+		var canvas = event.target;
+		var loc = getPointOnCanvas(canvas, x, y);
+		if (started) 
+		{
+			recordPath.lineTo(loc.x, loc.y);
+			//context.stroke();
+		}
+	}
+}
+
+function doTouchEnd(event) {
+	console.log("touch end!");
+	if (event.targetTouches.length == 1) {	// only one finger
+		event.preventDefault();
+		if (started)
+		{
+			doTouchMove(event);
+			started = false;
+		}
+	}
+	
 	
 }

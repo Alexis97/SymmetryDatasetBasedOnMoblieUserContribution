@@ -1,5 +1,5 @@
 // set the format of all devices
-document.getElementById("video").controls = false;
+//document.getElementById("video").controls = false;
 document.getElementById("canvas").width = window.innerWidth;
 document.getElementById("canvas").height = 0.5* window.innerHeight;
 //document.getElementById("upload").height = 0.5* window.innerHeight;
