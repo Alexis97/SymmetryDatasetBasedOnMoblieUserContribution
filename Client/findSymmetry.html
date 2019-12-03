@@ -18,8 +18,10 @@
     
     <!--body style='margin : 0px; overflow: hidden;'-->
     <body>
-        <input type="file" capture="camera" accept="image/*" id="cameraInput" name="cameraInput">
-
+        <form action="" enctype="multipart/form-data">
+            <input type="file" capture="camera" accept="image/*" id="cameraInput" name="cameraInput" style="display: none">
+        </form>
+        
         <!--video id="video" width="480" height="320" controls  style="display:none"> </video-->
         <canvas id="canvas" width="480" height="320">  </canvas>
        
@@ -34,5 +36,6 @@
         <script src="main.js" ></script>
         <script src="captureCamera.js" ></script>
         <script src="drawCanvas.js" ></script>
+        <script src="handleClick.js" ></script>
     </body>
 </html>

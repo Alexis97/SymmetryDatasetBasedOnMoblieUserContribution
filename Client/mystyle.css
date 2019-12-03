@@ -24,3 +24,7 @@ button:hover {
 	border: 2px solid #f44336; /* Red */
 	color: #f44336; /* Red */
 }
+
+#cameraInput {
+   	opacity: 0;
+}
