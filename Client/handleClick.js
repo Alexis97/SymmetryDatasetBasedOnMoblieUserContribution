@@ -30,6 +30,7 @@ function handleClear () {
     context.stroke(recordPath);
 }
 
+var host = "http://10.0.0.50:8000"
 
 $(function () {
    $("#upload").click(function () {
@@ -45,7 +46,7 @@ $(function () {
 
        var data = formFile;
        $.ajax({
-           url: "http://127.0.0.1:8000/upload",
+           url: host+"/upload",
            data: data,
            type: "Post",
            dataType: "json",
@@ -53,23 +54,33 @@ $(function () {
            processData: false,
            contentType: false, 
            success: function (result) {
-               alert("upload success!");
+                alert("upload success!");
            },
+           error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("upload failed!");
+                alert("XMLHttpRequest.status:", XMLHttpRequest.status);
+                alert(textStatus);
+           }
        })
    })
 
    $("#download").click(function () {
        $.ajax({
-           url: "http://127.0.0.1:8000/download",
+           url: host +"/show",
            type: "Get",
            dataType: "json",
            cache: false,
            processData: false,
            contentType: false, 
-           success: function (result) {
-               alert("download success!");
-               console.log(result);
+           success: function (data, textStatus) {
+                alert("download success!");
+                console.log(textStatus);
            },
+           error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("download failed!");
+                alert("XMLHttpRequest.status:", XMLHttpRequest.status);
+                alert(textStatus);
+           }
        })
    })
 })

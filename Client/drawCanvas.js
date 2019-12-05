@@ -72,9 +72,10 @@ function doMouseUp(event) {
 	
 }
 
+var demoText = document.getElementById("demo").innerHTML;
 function doTouchStart(event) {
 	console.log("touch start!");
-	document.getElementById("demo").innerHTML = "touch start!";
+	demoText = "touch start!";
 	if (event.targetTouches.length == 1) {	// only one finger
 		event.preventDefault();
 		var touch = event.targetTouches[0];
@@ -83,14 +84,14 @@ function doTouchStart(event) {
 		var canvas = event.target;
 		var loc = getPointOnCanvas(canvas, x, y);
 		console.log("mouse down at point( x:" + loc.x + ", y:" + loc.y + ")");
-		document.getElementById("demo").innerHTML = "mouse down at point( x:" + loc.x + ", y:" + loc.y + ")";
+		demoText = "mouse down at point( x:" + loc.x + ", y:" + loc.y + ")";
 		recordPath.moveTo(loc.x, loc.y);
 		started = true;
 	}
 }
 
 function doTouchMove(event) {
-
+	demoText = "touch move!";
 	if (event.targetTouches.length == 1) {	// only one finger
 		event.preventDefault();
 		var touch = event.targetTouches[0];
@@ -108,6 +109,7 @@ function doTouchMove(event) {
 
 function doTouchEnd(event) {
 	console.log("touch end!");
+	demoText = "touch end!";
 	if (event.targetTouches.length == 1) {	// only one finger
 		event.preventDefault();
 		if (started)
