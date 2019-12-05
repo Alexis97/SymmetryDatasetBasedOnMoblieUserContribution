@@ -1,0 +1,1 @@
+ios_webkit_debug_proxy -f chrome-devtools://devtools/bundled/inspector.html

@@ -21,7 +21,11 @@
     <!--body style='margin : 0px; overflow: hidden;'-->
     <body>
         <form action="" enctype="multipart/form-data">
-            <input type="file" capture="camera" accept="image/*" id="cameraInput" name="cameraInput" style="display: none">
+            <input type="file" capture="camera" accept="image/*" id="cameraInput" onchange= "changePic(this)" style="display: none">
+        </form>
+
+        <form>
+            The server ip: <input type="text" name="fname" id = "serverIp"/>
         </form>
         
         <!--video id="video" width="480" height="320" controls  style="display:none"> </video-->

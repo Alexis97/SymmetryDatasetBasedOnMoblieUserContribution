@@ -15,8 +15,7 @@
 // }
 
 //let video = document.getElementById('video');
-let canvas = document.getElementById('canvas');
-let context = canvas.getContext('2d');
+
 
 // function success(stream) {
 // 	let CompatibleURL = window.URL || window.webkitURL;
@@ -42,28 +41,14 @@ let context = canvas.getContext('2d');
 // }
 
 // get picture by cameraInput
-var img = new Image();
-var takePicture = document.getElementById('cameraInput');
-var takePictureUrl = function () {
-    takePicture.onchange = function (event) {
-        var file = this.files[0];
-        context.clearRect(0,0,canvas.width,canvas.height);
-        var reader = new FileReader();
-        reader.readAsDataURL(file);
-    	reader.onload = function(e){
-    		img.src = this.result;
-            context.drawImage(img, 0,0, canvas.width,canvas.height);
-    	}
-        
-    }
-}();
+
 
 
 
 // use a loop to refresh canvas
 var lastTime = Date.now();
 var deltaTime;
-var recordPath = new Path2D();
+
 
 //context.stroke(recordPath);
 

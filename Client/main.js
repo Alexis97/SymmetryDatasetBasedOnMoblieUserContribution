@@ -32,11 +32,3 @@ window.onload=function () {
 	  	event.preventDefault();
 	});
 }
-
-window.onerror = function(errorMessage, scriptURI, lineNumber,columnNumber,errorObj) { 
-    console.log("errorMessage" , errorMessage); 
-    console.log("scriptURI" , scriptURI); 
-    console.log("lineNumber" , lineNumber); 
-    console.log("columnNumber" , columnNumber); 
-    console.log("errorObj" , errorObj); 
-  } 

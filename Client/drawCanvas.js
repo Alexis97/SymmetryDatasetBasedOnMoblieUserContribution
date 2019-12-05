@@ -1,15 +1,15 @@
 // handle draw events on canvas
 // mouse events
 canvas.addEventListener("mousedown",doMouseDown,false);
-canvas.addEventListener('mousemove', doMouseMove,false);
 canvas.addEventListener('mouseup', doMouseUp, false);
 // touch events
 canvas.addEventListener('touchstart', doTouchStart, false);
 canvas.addEventListener('touchmove', doTouchMove, false);
 canvas.addEventListener('touchend', doTouchEnd, false);
 
-var started = false;
+var clicked = false, isStart = false;
 var x = 0, y = 0;
+var start, end;
 var strokeType = "line";
 
 function getPointOnCanvas(canvas, x, y) {
@@ -19,55 +19,75 @@ function getPointOnCanvas(canvas, x, y) {
 			};
 }
 
+function drawLine(context, start, end, type = "solid") {
+	context.beginPath();
+	context.moveTo(start.x,start.y);
+	context.lineTo(end.x,end.y);
+
+	switch(type)
+	{
+		case "solid":
+			context.lineWidth = 2;
+			context.strokeStyle = "red";
+			break;
+	}
+	context.stroke();
+
+}
+
+function drawShape(context, loc, type = "circle") {
+	switch(type)
+	{
+		case "circle":
+			var radius = 3;
+			context.beginPath();
+			context.arc(loc.x,loc.y, radius, 0, 2*Math.PI);
+			context.fillStyle = "red";
+			context.fill();
+	}
+	
+}
+
 function doMouseDown(event) {
 	var x = event.pageX;
 	var y = event.pageY;
 	var canvas = event.target;
-	var loc = getPointOnCanvas(canvas, x, y);
-	console.log("mouse down at point( x:" + loc.x + ", y:" + loc.y + ")");
-	if (strokeType == "line")
-	{
-		recordPath.moveTo(loc.x, loc.y);
-	}
-	started = true;
-}
-
-function doMouseMove(event) {
-	var x = event.pageX;
-	var y = event.pageY;
-	var canvas = event.target;
-	var loc = getPointOnCanvas(canvas, x, y);
-	if (started) 
-	{
-		if (strokeType == "line")
-		{
-			recordPath.lineTo(loc.x, loc.y);
-			context.stroke(recordPath);
-		}
-		//context.stroke();
-	}
+	
+	clicked = true;
 }
 
 function doMouseUp(event) {
-	console.log("mouse up!");
-	if (started)
+	if (clicked)
 	{
-		doMouseMove(event);
+		var x = event.pageX;
+		var y = event.pageY;
+		var loc = getPointOnCanvas(canvas, x, y);
 
-		if (strokeType == "dot")
+		switch (strokeType)
 		{
-			var x = event.pageX;
-			var y = event.pageY;
-			var canvas = event.target;
-			var loc = getPointOnCanvas(canvas, x, y);
-			
-			context.beginPath();
-			context.arc(loc.x, loc.y, 10, 0, 2*Math.PI);
-			context.stroke(recordPath);
-		}
+			case "line":		
+				if (isStart)
+				{	
+					end = loc; 
+					console.log("End: click at point( x:" + loc.x + ", y:" + loc.y + ")");
+					drawLine(context, start, end, "solid");
 
-		//recordPath.closePath();
-		started = false;
+					isStart = false;
+				}
+				else
+				{
+					start = loc; 
+					console.log("Start: click at point( x:" + loc.x + ", y:" + loc.y + ")");
+					isStart = true;
+				}
+				break;
+			case "dot":
+				drawShape(context, loc, "circle");
+				console.log("Dot: click at point( x:" + loc.x + ", y:" + loc.y + ")");
+				break;
+
+		}
+		clicked = false;
 	}
 	
 }
