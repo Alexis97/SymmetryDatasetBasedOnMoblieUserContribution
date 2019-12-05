@@ -52,6 +52,7 @@ var takePictureUrl = function () {
         reader.readAsDataURL(file);
     	reader.onload = function(e){
     		img.src = this.result;
+            context.drawImage(img, 0,0, canvas.width,canvas.height);
     	}
         
     }
@@ -64,18 +65,20 @@ var lastTime = Date.now();
 var deltaTime;
 var recordPath = new Path2D();
 
+//context.stroke(recordPath);
+
 //var inputImage = document.getElementById("image");
 //inputImage.setAttribute("type", "image");
-function gameloop(){
-    var now = Date.now(); 
-    deltaTime = now - lastTime; 
-    console.log('deltaTime');
-    lastTime = now;
+// function gameloop(){
+//     var now = Date.now(); 
+//     deltaTime = now - lastTime; 
+//     console.log('deltaTime');
+//     lastTime = now;
 
-    context.drawImage(img, 0,0, canvas.width,canvas.height);
-    //context.drawImage(inputImage, 0, 0, 480, 320);
-    context.stroke(recordPath);
-    window.requestAnimationFrame(gameloop);
-}
+//     context.drawImage(img, 0,0, canvas.width,canvas.height);
+//     //context.drawImage(inputImage, 0, 0, 480, 320);
+//     context.stroke(recordPath);
+//     window.requestAnimationFrame(gameloop);
+// }
 
-window.requestAnimationFrame(gameloop);
+// window.requestAnimationFrame(gameloop);

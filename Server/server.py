@@ -1,41 +1,59 @@
-import socket
+from flask import Flask,render_template,request,redirect,url_for
+from werkzeug.utils import secure_filename
+import os
+from flask import send_from_directory
+from werkzeug import SharedDataMiddleware
+import base64
 
-# address
-HOST = '0.0.0.0'
-PORT = 8000
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = 'upload'
+app.config['ALLOWED_EXTENSIONS'] = set(['png', 'jpg', 'jpeg', 'gif'])
 
-# Prepare HTTP response
-text_content = ''
+def allowed_file(filename):
+	return '.' in filename and \
+		   filename.rsplit('.', 1)[1].lower() in set(['png', 'jpg', 'jpeg', 'gif'])
 
-print ('My Host:', HOST)
+def return_img_stream(img_local_path):
+	img_stream = ''
+	with open(img_local_path, 'r') as img_f:
+		img_stream = img_f.read()
+		img_stream = base64.b64encode(img_stream)
+	return img_stream
 
-def connect():
-	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	s.bind((HOST,PORT))
-	print (s)
-	# loop listen
-	while True:
-		s.listen(3)
-		conn, addr = s.accept()
-		request = conn.recv(1024)
-		request = str(request, encoding = "utf-8")
+@app.route('/upload', methods=['GET', 'POST'])
+def upload():
+	print('---------upload-----------')
+	print('request.method:', request.method )
+	if request.method == 'POST':
+		if 'file' not in request.files:
+			print('No file part')
+			return redirect(request.url)
+		file = request.files['file']
 		
-		print('Connect by', addr)
-		print('Request is', request)
+		if file.filename == '':
+			print('No selected file')
+			return redirect(request.url)
 
-		requestSplit = request.split(' ')
-		if (len(requestSplit) > 1):
-			method = request.split(' ')[0]
-			src = request.split(' ')[1]
-		
-			# deal with GET method
-			if method == 'GET':
-				print('deal with GET method')
-			elif method == 'POST':
-				print('deal with POST method')
+		if file:
+			print('file', file)
+			filename = secure_filename(file.filename)
+			file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+			return  '{"filename":"%s"}' % filename
+	return ''
 
-		# close connection
-		conn.close()
+@app.route('/download', methods=['GET', 'POST'])
+def download():
+	print('---------download-----------')
+	print('request.method:', request.method )
+	if request.method == 'GET':
+		img_path = './upload/boost.jpg'
+		img_stream = return_img_stream(img_path)
+		print('request.args:', request.args)
+		return render_template('findSymmetry.html', img_stream=img_stream)
+	return ''
+
 
 if __name__ == '__main__':
-	connect()
+	#connect()
+	#app.run(host='0.0.0.0',port = 8000, debug = True)
+	app.run(port = 8000, debug = True)

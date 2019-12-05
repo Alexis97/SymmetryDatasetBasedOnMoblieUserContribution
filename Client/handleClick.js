@@ -1,58 +1,75 @@
 document.getElementById('capture').addEventListener('click', handleCapture);
 document.getElementById('change').addEventListener('click', handleChange);
 document.getElementById('clear').addEventListener('click', handleClear);
-document.getElementById('upload').addEventListener('click', handleUpload);
+//document.getElementById('upload').addEventListener('click', handleUpload);
+
+var imgfile;
 
 function handleCapture () {
 	console.log("capture!");
 	document.getElementById('cameraInput').click();
+    imgfile = document.getElementById('cameraInput').files[0];
 }
 
 function handleChange () {
 	console.log("change!");
-	
+	switch (strokeType)
+    {
+        case "line":
+            strokeType = "dot";
+            break;
+        case "dot":
+            strokeType = "line";
+            break;
+    }
 }
 
 function handleClear () {
 	console.log("clear!");
 	recordPath = new Path2D();
+    context.stroke(recordPath);
 }
 
-function handleUpload () {
-	console.log("upload!");
-	var canvas = document.getElementById("canvas");
-	var base64Data = canvas.toDataURL("image/jpeg", 1.0);
-	var blob = dataURItoBlob(base64Data);
-	var formData = new FormData();
-    formData.append("fileData", blob);
-    formData.append("fileName", "test");
-    //console.log(base64Data)
 
-    var xmlHttp = new XMLHttpRequest();
-    var url = "comp-ic-0014.aci.ics.psu.edu/test.jpg";
-    xmlHttp.open("POST", url);
-    xmlHttp.setRequestHeader("content-type", "multipart/form-data");
-    xmlHttp.send(base64Data);
-    //ajax 
-    xmlHttp.onreadystatechange = () => {
-        //todo  your code...
-        if (this.readyState == 4){
-        	console.log("upload success!");
-    	};
-    }
+$(function () {
+   $("#upload").click(function () {
+       var fileObj = document.getElementById("cameraInput").files[0]; 
+       if (typeof (fileObj) == "undefined" || fileObj.size <= 0) {
+           alert("Please select photo!");
+           return;
+       }
+       var formFile = new FormData();
+       formFile.append("action", "UploadVMKImagePath");  
+       formFile.append("file", fileObj); 
 
-}
 
-function dataURItoBlob (base64Data) {
-    var byteString;
-    if (base64Data.split(',')[0].indexOf('base64') >= 0)
-        byteString = atob(base64Data.split(',')[1]);
-    else
-        byteString = unescape(base64Data.split(',')[1]);
-    var mimeString = base64Data.split(',')[0].split(':')[1].split(';')[0];
-    var ia = new Uint8Array(byteString.length);
-    for (var i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i);
-    }
-    return new Blob([ia], {type: mimeString});
-};
+       var data = formFile;
+       $.ajax({
+           url: "http://127.0.0.1:8000/upload",
+           data: data,
+           type: "Post",
+           dataType: "json",
+           cache: false,
+           processData: false,
+           contentType: false, 
+           success: function (result) {
+               alert("upload success!");
+           },
+       })
+   })
+
+   $("#download").click(function () {
+       $.ajax({
+           url: "http://127.0.0.1:8000/download",
+           type: "Get",
+           dataType: "json",
+           cache: false,
+           processData: false,
+           contentType: false, 
+           success: function (result) {
+               alert("download success!");
+               console.log(result);
+           },
+       })
+   })
+})
