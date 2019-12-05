@@ -65,7 +65,8 @@ $(function () {
    })
 
    $("#download").click(function () {
-       $.ajax({
+        alert("test click");
+        $.ajax({
            url: host +"/show",
            type: "Get",
            dataType: "json",
