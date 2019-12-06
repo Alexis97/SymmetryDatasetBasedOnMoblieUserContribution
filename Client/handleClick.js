@@ -78,7 +78,7 @@ $(function () {
             host = "http://"+ip+":8000";
         console.log("host:", host);
 
-        alert(host);
+        // alert(host);
         // get the user name
         var name = document.getElementById("userName").value;
         if (name != "")
@@ -111,11 +111,11 @@ $(function () {
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 alert("upload failed!");
-                //alert("XMLHttpRequest.status:", XMLHttpRequest.status);
+                alert(XMLHttpRequest.status);
                 //alert(textStatus);
            }
         })
-        alert("sometest");
+        // alert("sometest");
    })
 
    $("#download").click(function () {
