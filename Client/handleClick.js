@@ -78,6 +78,7 @@ $(function () {
             host = "http://"+ip+":8000";
         console.log("host:", host);
 
+        alert(host);
         // get the user name
         var name = document.getElementById("userName").value;
         if (name != "")
@@ -114,6 +115,7 @@ $(function () {
                 //alert(textStatus);
            }
         })
+        alert("sometest");
    })
 
    $("#download").click(function () {
