@@ -67,24 +67,34 @@ function handleClear () {
     recordLabels = new Array();
 }
 
-var host = "http://10.0.0.50:8000"
+var host = "http://10.0.0.50:8000";
+var userName = "alexis";
 
 $(function () {
    $("#upload").click(function () {
         // get the ip from textbox
         var ip = document.getElementById("serverIp").value;
-        host = "http://"+ip+":8000";
+        if (ip != "")
+            host = "http://"+ip+":8000";
         console.log("host:", host);
 
+        // get the user name
+        var name = document.getElementById("userName").value;
+        if (name != "")
+            userName = name;
+
+        // get the image object
         var imgObj = document.getElementById("cameraInput").files[0]; 
         if (typeof (imgObj) == "undefined" || imgObj.size <= 0) {
             alert("Please select photo!");
             return;
         }
+
         var formFile = new FormData();
         formFile.append("action", "UploadVMKImagePath");  
         formFile.append("file", imgObj); 
-        formFile.append()
+        formFile.append("user", userName);
+        formFile.append("label", recordLabels);
 
         var data = formFile;
         $.ajax({
@@ -100,13 +110,10 @@ $(function () {
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 alert("upload failed!");
-                alert("XMLHttpRequest.status:", XMLHttpRequest.status);
-                alert(textStatus);
+                //alert("XMLHttpRequest.status:", XMLHttpRequest.status);
+                //alert(textStatus);
            }
         })
-
-        // also post the label
-        console.log(recordLabels);
    })
 
    $("#download").click(function () {

@@ -101,13 +101,14 @@ function doTouchStart(event) {
 		var y = touch.pageY;
 		var canvas = event.target;
 		var loc = getPointOnCanvas(canvas, x, y);
+		//var loc = {x:x, y:y};
 		switch (strokeType)
 		{
 			case "line":		
 				if (isStart)
 				{	
 					end = loc; 
-					demoText = "End: click at point( x:" + loc.x + ", y:" + loc.y + ")";
+					console.log("End: click at point( x:" + loc.x + ", y:" + loc.y + ")");
 					drawLine(context, start, end, "solid");
 
 					isStart = false;
@@ -115,7 +116,7 @@ function doTouchStart(event) {
 				else
 				{
 					start = loc; 
-					demoText = "Start: click at point( x:" + loc.x + ", y:" + loc.y + ")";
+					console.log("Start: click at point( x:" + loc.x + ", y:" + loc.y + ")");
 					isStart = true;
 				}
 				break;
@@ -126,47 +127,4 @@ function doTouchStart(event) {
 
 		}
 	}
-}
-
-function doTouchEnd(event) {
-	if (event.targetTouches.length == 1) {	// only one finger
-		event.preventDefault();
-		if (clicked)
-		{
-			var touch = event.targetTouches[0];
-			var x = touch.pageX;
-			var y = touch.pageY;
-			var canvas = event.target;
-			var loc = getPointOnCanvas(canvas, x, y);
-			demoText = "mouse down at point( x:" + loc.x + ", y:" + loc.y + ")";
-			switch (strokeType)
-			{
-				case "line":		
-					if (isStart)
-					{	
-						end = loc; 
-						demoText = "End: click at point( x:" + loc.x + ", y:" + loc.y + ")";
-						drawLine(context, start, end, "solid");
-
-						isStart = false;
-					}
-					else
-					{
-						start = loc; 
-						demoText = "Start: click at point( x:" + loc.x + ", y:" + loc.y + ")";
-						isStart = true;
-					}
-					break;
-				case "dot":
-					drawShape(context, loc, "circle");
-					demoText = "Dot: click at point( x:" + loc.x + ", y:" + loc.y + ")";
-					break;
-
-			}
-
-			clicked = false;
-		}
-	}
-	
-	
 }
