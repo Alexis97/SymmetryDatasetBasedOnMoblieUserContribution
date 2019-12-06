@@ -4,8 +4,7 @@ canvas.addEventListener("mousedown",doMouseDown,false);
 canvas.addEventListener('mouseup', doMouseUp, false);
 // touch events
 canvas.addEventListener('touchstart', doTouchStart, false);
-canvas.addEventListener('touchmove', doTouchMove, false);
-canvas.addEventListener('touchend', doTouchEnd, false);
+//canvas.addEventListener('touchend', doTouchEnd, false);
 
 var clicked = false, isStart = false;
 var x = 0, y = 0;
@@ -29,10 +28,13 @@ function drawLine(context, start, end, type = "solid") {
 		case "solid":
 			context.lineWidth = 2;
 			context.strokeStyle = "red";
+			// record this label
+			recordLabels.push({type:"reflection", startPos: start, endPos: end});
 			break;
 	}
 	context.stroke();
 
+	
 }
 
 function drawShape(context, loc, type = "circle") {
@@ -44,15 +46,13 @@ function drawShape(context, loc, type = "circle") {
 			context.arc(loc.x,loc.y, radius, 0, 2*Math.PI);
 			context.fillStyle = "red";
 			context.fill();
+			// record this label
+			recordLabels.push({type:"rotation", centerPos: loc, foldNum: 2});
 	}
 	
 }
 
 function doMouseDown(event) {
-	var x = event.pageX;
-	var y = event.pageY;
-	var canvas = event.target;
-	
 	clicked = true;
 }
 
@@ -94,8 +94,6 @@ function doMouseUp(event) {
 
 var demoText = document.getElementById("demo").innerHTML;
 function doTouchStart(event) {
-	console.log("touch start!");
-	demoText = "touch start!";
 	if (event.targetTouches.length == 1) {	// only one finger
 		event.preventDefault();
 		var touch = event.targetTouches[0];
@@ -103,39 +101,70 @@ function doTouchStart(event) {
 		var y = touch.pageY;
 		var canvas = event.target;
 		var loc = getPointOnCanvas(canvas, x, y);
-		console.log("mouse down at point( x:" + loc.x + ", y:" + loc.y + ")");
-		demoText = "mouse down at point( x:" + loc.x + ", y:" + loc.y + ")";
-		recordPath.moveTo(loc.x, loc.y);
-		started = true;
-	}
-}
-
-function doTouchMove(event) {
-	demoText = "touch move!";
-	if (event.targetTouches.length == 1) {	// only one finger
-		event.preventDefault();
-		var touch = event.targetTouches[0];
-		var x = touch.pageX;
-		var y = touch.pageY;
-		var canvas = event.target;
-		var loc = getPointOnCanvas(canvas, x, y);
-		if (started) 
+		switch (strokeType)
 		{
-			recordPath.lineTo(loc.x, loc.y);
-			//context.stroke();
+			case "line":		
+				if (isStart)
+				{	
+					end = loc; 
+					demoText = "End: click at point( x:" + loc.x + ", y:" + loc.y + ")";
+					drawLine(context, start, end, "solid");
+
+					isStart = false;
+				}
+				else
+				{
+					start = loc; 
+					demoText = "Start: click at point( x:" + loc.x + ", y:" + loc.y + ")";
+					isStart = true;
+				}
+				break;
+			case "dot":
+				drawShape(context, loc, "circle");
+				demoText = "Dot: click at point( x:" + loc.x + ", y:" + loc.y + ")";
+				break;
+
 		}
 	}
 }
 
 function doTouchEnd(event) {
-	console.log("touch end!");
-	demoText = "touch end!";
 	if (event.targetTouches.length == 1) {	// only one finger
 		event.preventDefault();
-		if (started)
+		if (clicked)
 		{
-			doTouchMove(event);
-			started = false;
+			var touch = event.targetTouches[0];
+			var x = touch.pageX;
+			var y = touch.pageY;
+			var canvas = event.target;
+			var loc = getPointOnCanvas(canvas, x, y);
+			demoText = "mouse down at point( x:" + loc.x + ", y:" + loc.y + ")";
+			switch (strokeType)
+			{
+				case "line":		
+					if (isStart)
+					{	
+						end = loc; 
+						demoText = "End: click at point( x:" + loc.x + ", y:" + loc.y + ")";
+						drawLine(context, start, end, "solid");
+
+						isStart = false;
+					}
+					else
+					{
+						start = loc; 
+						demoText = "Start: click at point( x:" + loc.x + ", y:" + loc.y + ")";
+						isStart = true;
+					}
+					break;
+				case "dot":
+					drawShape(context, loc, "circle");
+					demoText = "Dot: click at point( x:" + loc.x + ", y:" + loc.y + ")";
+					break;
+
+			}
+
+			clicked = false;
 		}
 	}
 	

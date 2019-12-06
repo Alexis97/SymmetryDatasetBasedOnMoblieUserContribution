@@ -4,7 +4,7 @@ document.getElementById('clear').addEventListener('click', handleClear);
 //document.getElementById('upload').addEventListener('click', handleUpload);
 
 var imgfile;
-var recordPath = new Array();
+var recordLabels = new Array();
 
 var canvas = document.getElementById('canvas');
 var context = canvas.getContext('2d');
@@ -64,6 +64,7 @@ function handleChange () {
 function handleClear () {
 	console.log("clear!");
 	changePic();
+    recordLabels = new Array();
 }
 
 var host = "http://10.0.0.50:8000"
@@ -75,15 +76,15 @@ $(function () {
         host = "http://"+ip+":8000";
         console.log("host:", host);
 
-        var fileObj = document.getElementById("cameraInput").files[0]; 
-        if (typeof (fileObj) == "undefined" || fileObj.size <= 0) {
+        var imgObj = document.getElementById("cameraInput").files[0]; 
+        if (typeof (imgObj) == "undefined" || imgObj.size <= 0) {
             alert("Please select photo!");
             return;
         }
         var formFile = new FormData();
         formFile.append("action", "UploadVMKImagePath");  
-        formFile.append("file", fileObj); 
-
+        formFile.append("file", imgObj); 
+        formFile.append()
 
         var data = formFile;
         $.ajax({
@@ -102,16 +103,18 @@ $(function () {
                 alert("XMLHttpRequest.status:", XMLHttpRequest.status);
                 alert(textStatus);
            }
-       })
+        })
+
+        // also post the label
+        console.log(recordLabels);
    })
 
    $("#download").click(function () {
         var ip = document.getElementById("serverIp").value;
         host = "http://"+ip+":8000";
         console.log("host:", host);
-        
+
         $.ajax({
-            //url: host +"/show",
             url: host+"/show",
             type: "Get",
             dataType: "json",
@@ -121,16 +124,17 @@ $(function () {
             async: true,
             headers: {
                 "cache-control": "no-cache"
-           },
-           success: function (data, textStatus) {
+            },
+            crossDomain: true,
+            success: function (data, textStatus) {
                 alert("download success!");
                 console.log(textStatus);
                 console.log(data);
-           },
-           error: function (XMLHttpRequest, textStatus, errorThrown) {
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
                 alert("download failed!");
-                alert("XMLHttpRequest.status:", XMLHttpRequest.status);
-                alert(textStatus);
+                //alert("XMLHttpRequest.status:", XMLHttpRequest.status);
+                //alert(textStatus);
            }
        })
    })
