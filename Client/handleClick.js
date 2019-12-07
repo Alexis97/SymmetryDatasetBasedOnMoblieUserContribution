@@ -18,27 +18,31 @@ function changePic () {
         img.src = e.target.result;
         img.onload = function() {
             // console.log(img.width, img.height);
-            // resize img
-            var new_w = img.width, new_h = img.height;
-            if (img.width > canvas.width)
-            {
-                new_w = canvas.width;
-                new_h = img.height/img.width *new_w;
-            }
-            if (new_h > canvas.height)
-            {
-                new_h = canvas.height;
-                new_w = img.width/img.height *new_h;
-            }
-            // console.log(new_w, new_h);
-            // clear the canvas
-            context.clearRect(0,0,canvas.width, canvas.height)
-            context.drawImage(img, 0,0, new_w,new_h);
+            drawImageOnCanvas(canvas, img);
         }
         
     }
 }
 
+function drawImageOnCanvas(canvas,img) {
+    var context = canvas.getContext('2d');
+    // resize img
+    var new_w = img.width, new_h = img.height;
+    if (img.width > canvas.width)
+    {
+        new_w = canvas.width;
+        new_h = img.height/img.width *new_w;
+    }
+    if (new_h > canvas.height)
+    {
+        new_h = canvas.height;
+        new_w = img.width/img.height *new_h;
+    }
+    // console.log(new_w, new_h);
+    // clear the canvas
+    context.clearRect(0,0,canvas.width, canvas.height)
+    context.drawImage(img, 0,0, new_w,new_h);
+}
 
 function handleCapture () {
 	console.log("capture!");
@@ -67,6 +71,8 @@ function handleClear () {
     recordLabels = new Array();
 }
 
+
+// AJAX + jQuery part 
 var host = "http://10.0.0.50:8000";
 var userName = "alexis";
 
@@ -74,6 +80,7 @@ $(function () {
    $("#upload").click(function () {
         // get the ip from textbox
         var ip = document.getElementById("serverIp").value;
+        //console.log("ip:",ip);
         if (ip != "")
             host = "http://"+ip+":8000";
         console.log("host:", host);
@@ -85,42 +92,56 @@ $(function () {
             userName = name;
 
         // get the image object
-        var imgObj = document.getElementById("cameraInput").files[0]; 
-        if (typeof (imgObj) == "undefined" || imgObj.size <= 0) {
+        var img = document.getElementById("cameraInput").files[0]; 
+        if (typeof (img) == "undefined" || img.size <= 0) {
             alert("Please select photo!");
             return;
         }
 
-        var formFile = new FormData();
-        formFile.append("action", "UploadVMKImagePath");  
-        formFile.append("file", imgObj); 
-        formFile.append("user", userName);
-        formFile.append("label", recordLabels);
+        // get the image name
+        var image_name = "test.png"
+        var reader = new FileReader();
+        reader.readAsDataURL(img);
+        reader.onload = function(e){
+            var image_base64 = e.target.result;
+            
+            var data = {
+                "name": image_name,
+                "image_base64": image_base64,
+                "user": userName,
+                "label": recordLabels
+            };
 
-        var data = formFile;
-        $.ajax({
-            url: host+"/upload",
-            data: data,
-            type: "Post",
-            dataType: "json",
-            cache: false,
-            processData: false,
-            contentType: false, 
-            success: function (result) {
-                alert("upload success!");
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                alert("upload failed!");
-                alert(XMLHttpRequest.status);
-                //alert(textStatus);
-           }
-        })
+            console.log(data);
+            $.ajax({
+                url: host+"/upload",
+                data: JSON.stringify(data),
+                type: "Post",
+                dataType: "json",
+                cache: false,
+                processData: false,
+                async: true,
+                contentType: "application/json", 
+                success: function (result) {
+                    alert("upload success!");
+                    console.log(result)
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("upload failed!");
+                    alert(XMLHttpRequest.status);
+                    //alert(textStatus);
+               }
+            })
+        }
+        //console.log(image_base64);
+        
         // alert("sometest");
    })
 
    $("#download").click(function () {
         var ip = document.getElementById("serverIp").value;
-        host = "http://"+ip+":8000";
+        if (ip != "")
+            host = "http://"+ip+":8000";
         console.log("host:", host);
 
         $.ajax({
@@ -131,20 +152,26 @@ $(function () {
             processData: false,
             contentType: false, 
             async: true,
-            headers: {
-                "cache-control": "no-cache"
-            },
             crossDomain: true,
             success: function (data, textStatus) {
                 alert("download success!");
-                console.log(textStatus);
-                console.log(data);
+                console.log("textStatus:", textStatus);
+                //console.log(data.image_base64);
+                
+                //decode the image and show it on canvas
+                var img = new Image();
+                img.src = "data:image;base64," + data.image_base64;
+                // console.log(img);
+                img.onload = function() {
+                    drawImageOnCanvas(canvas, img);
+                }
+
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 alert("download failed!");
-                //alert("XMLHttpRequest.status:", XMLHttpRequest.status);
-                //alert(textStatus);
+                console.log("textStatus:", textStatus);
            }
        })
    })
+
 })
